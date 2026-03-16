@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园导航 - 地图</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库（确保图标能正常显示） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1677FF',
+                        neutral: '#F5F7FA',
+                        textMain: '#333647',
+                        textSecondary: '#86909C'
+                    },
+                    boxShadow: {
+                        'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-btn {
+                @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+            }
+            .nav-active {
+                @apply bg-primary text-white rounded-lg;
+            }
+            .nav-inactive {
+                @apply hover:bg-neutral rounded-lg;
+            }
+            .card-hover {
+                @apply hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300;
+            }
+            /* 滚动容器样式 */
+            .scroll-container {
+                @apply max-h-[70vh] overflow-y-auto pr-2;
+                /* 自定义滚动条样式（可选，提升美观度） */
+                scrollbar-width: thin;
+                scrollbar-color: #1677FF #F5F7FA;
+            }
+            .scroll-container::-webkit-scrollbar {
+                width: 4px;
+            }
+            .scroll-container::-webkit-scrollbar-track {
+                background: #F5F7FA;
+                border-radius: 2px;
+            }
+            .scroll-container::-webkit-scrollbar-thumb {
+                background-color: #1677FF;
+                border-radius: 2px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+    <!-- 导航栏：补充所有图标 + 加宽拉细 + 居中 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <!-- 左侧logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <span class="text-lg font-medium">校园导航</span>
+                        <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+                    </div>
+                </div>
+                <!-- 右侧导航按钮：补充所有图标 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-active">
+                        <i class="fa fa-map-marker text-sm"></i> <!-- 地图图标 -->
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                        <i class="fa fa-search text-sm"></i> <!-- 搜索图标 -->
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                        <i class="fa fa-road text-sm"></i> <!-- 路线图标 -->
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                        <i class="fa fa-star text-sm"></i> <!-- 收藏图标 -->
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+                   <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='profile.html'">
+                        <i class="fa fa-user text-sm"></i> <!-- 我的图标 -->
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 核心内容：居中 + 限制最大宽度 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- 左侧地点列表：添加滚动效果 -->
+            <div class="w-full lg:w-80 bg-white rounded-xl shadow-card p-4 h-fit">
+                <div class="relative mb-4">
+                    <input type="text" placeholder="搜索地点、建筑..." 
+                           class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <i class="fa fa-search absolute left-3 top-3 text-textSecondary"></i>
+                </div>
+                <button class="w-full bg-primary text-white py-2 rounded-lg mb-6 flex items-center justify-center hover:bg-primary/90 transition-colors">
+                    <i class="fa fa-location-arrow mr-2"></i>获取当前位置
+                </button>
+                
+                <h3 class="font-medium text-lg mb-3">热门地点</h3>
+                <!-- 滚动容器：限制高度 + 开启滚动 -->
+                <div class="space-y-4 scroll-container">
+                    <!-- 原有地点 -->
+                    <div class="bg-neutral rounded-lg p-3 card-hover">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-book"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium">主图书馆</h4>
+                                <p class="text-xs text-textSecondary">Main Library</p>
+                                <p class="text-xs mt-1">学校主图书馆，提供自习室和丰富的图书资源</p>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-map-marker mr-1"></i>建筑编号: A1
+                                </div>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-clock-o mr-1"></i>开放时间: 8:00 - 22:00
+                                </div>
+                            </div>
+                            <i class="fa fa-star-o text-textSecondary cursor-pointer hover:text-primary"></i>
+                        </div>
+                        <button class="w-full bg-primary text-white py-1.5 rounded-lg mt-2 text-sm hover:bg-primary/90 transition-colors">
+                            前往这里
+                        </button>
+                    </div>
+
+                    <div class="bg-neutral rounded-lg p-3 card-hover">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-cutlery"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium">第一食堂</h4>
+                                <p class="text-xs text-textSecondary">Cafeteria No.1</p>
+                                <p class="text-xs mt-1">学校最大的食堂，提供各类美食</p>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-map-marker mr-1"></i>建筑编号: B3
+                                </div>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-clock-o mr-1"></i>开放时间: 7:00 - 20:00
+                                </div>
+                            </div>
+                            <i class="fa fa-star-o text-textSecondary cursor-pointer hover:text-primary"></i>
+                        </div>
+                        <button class="w-full bg-primary text-white py-1.5 rounded-lg mt-2 text-sm hover:bg-primary/90 transition-colors">
+                            前往这里
+                        </button>
+                    </div>
+
+                    <div class="bg-neutral rounded-lg p-3 card-hover">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-futbol-o"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium">体育中心</h4>
+                                <p class="text-xs text-textSecondary">Sports Center</p>
+                                <p class="text-xs mt-1">综合体育场馆，包含篮球场、游泳馆等设施</p>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-map-marker mr-1"></i>建筑编号: C1
+                                </div>
+                            </div>
+                            <i class="fa fa-star-o text-textSecondary cursor-pointer hover:text-primary"></i>
+                        </div>
+                        <button class="w-full bg-primary text-white py-1.5 rounded-lg mt-2 text-sm hover:bg-primary/90 transition-colors">
+                            前往这里
+                        </button>
+                    </div>
+
+                    <!-- 新增示例地点（验证滚动效果） -->
+                    <div class="bg-neutral rounded-lg p-3 card-hover">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-university"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium">教学楼A座</h4>
+                                <p class="text-xs text-textSecondary">Teaching Building A</p>
+                                <p class="text-xs mt-1">主要的理论教学教学楼，配备多媒体教室</p>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-map-marker mr-1"></i>建筑编号: D2
+                                </div>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-clock-o mr-1"></i>开放时间: 6:30 - 23:00
+                                </div>
+                            </div>
+                            <i class="fa fa-star-o text-textSecondary cursor-pointer hover:text-primary"></i>
+                        </div>
+                        <button class="w-full bg-primary text-white py-1.5 rounded-lg mt-2 text-sm hover:bg-primary/90 transition-colors">
+                            前往这里
+                        </button>
+                    </div>
+
+                    <div class="bg-neutral rounded-lg p-3 card-hover">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-flask"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium">实验楼</h4>
+                                <p class="text-xs text-textSecondary">Laboratory Building</p>
+                                <p class="text-xs mt-1">理工科实验教学专用楼，配备专业设备</p>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-map-marker mr-1"></i>建筑编号: E5
+                                </div>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-clock-o mr-1"></i>开放时间: 8:00 - 21:00
+                                </div>
+                            </div>
+                            <i class="fa fa-star-o text-textSecondary cursor-pointer hover:text-primary"></i>
+                        </div>
+                        <button class="w-full bg-primary text-white py-1.5 rounded-lg mt-2 text-sm hover:bg-primary/90 transition-colors">
+                            前往这里
+                        </button>
+                    </div>
+
+                    <div class="bg-neutral rounded-lg p-3 card-hover">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-coffee"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium">咖啡厅</h4>
+                                <p class="text-xs text-textSecondary">Coffee Shop</p>
+                                <p class="text-xs mt-1">休闲交流场所，提供咖啡和简餐</p>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-map-marker mr-1"></i>建筑编号: F1
+                                </div>
+                                <div class="flex items-center text-xs text-textSecondary mt-1">
+                                    <i class="fa fa-clock-o mr-1"></i>开放时间: 9:00 - 22:00
+                                </div>
+                            </div>
+                            <i class="fa fa-star-o text-textSecondary cursor-pointer hover:text-primary"></i>
+                        </div>
+                        <button class="w-full bg-primary text-white py-1.5 rounded-lg mt-2 text-sm hover:bg-primary/90 transition-colors">
+                            前往这里
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧地图容器（保留原有样式） -->
+            <div class="flex-1 bg-white rounded-xl shadow-card p-4 h-[80vh] relative">
+                <div class="w-full h-full flex items-center justify-center flex-col text-textSecondary">
+                    <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                        <i class="fa fa-map-marker text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-1">校园地图</h3>
+                    <p class="text-sm mb-2">经度: 116.4074, 纬度: 39.9042</p>
+                    <p class="text-sm">缩放级别: 15</p>
+                    <div class="absolute right-4 top-4 flex flex-col gap-2">
+                        <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-neutral transition-colors">
+                            <i class="fa fa-chevron-up text-xs"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-neutral transition-colors">
+                            <i class="fa fa-plus text-xs"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center hover:bg-neutral transition-colors">
+                            <i class="fa fa-minus text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="absolute bottom-4 left-4 bg-white px-2 py-1 rounded text-xs shadow-sm">
+                        显示 6 个地点
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

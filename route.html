@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园导航 - 路线</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1677FF',
+                        neutral: '#F5F7FA',
+                        textMain: '#333647',
+                        textSecondary: '#86909C'
+                    },
+                    boxShadow: {
+                        'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-btn {
+                @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+            }
+            .nav-active {
+                @apply bg-primary text-white rounded-lg;
+            }
+            .nav-inactive {
+                @apply hover:bg-neutral rounded-lg;
+            }
+            .route-card {
+                @apply bg-white rounded-lg p-4 border-l-4 border-primary shadow-sm hover:shadow-card-hover transition-all duration-300 cursor-pointer;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+    <!-- 导航栏：加宽拉细 + 居中 + 激活路线按钮 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <!-- 左侧logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <span class="text-lg font-medium">校园导航</span>
+                        <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+                    </div>
+                </div>
+                <!-- 右侧导航按钮 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                        <i class="fa fa-map-marker text-sm"></i>
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                        <i class="fa fa-search text-sm"></i>
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-active">
+                        <i class="fa fa-road text-sm"></i>
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                        <i class="fa fa-star text-sm"></i>
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='profile.html'">
+                        <i class="fa fa-user text-sm"></i>
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 核心内容：居中 + 限制最大宽度 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="max-w-3xl mx-auto">
+            <!-- 路线规划 -->
+            <div class="bg-white rounded-xl shadow-card p-6 mb-6">
+                <h2 class="text-xl font-medium mb-2">路线规划</h2>
+                <p class="text-textSecondary text-sm mb-4">规划您的校园路线</p>
+                
+                <div class="space-y-3">
+                    <!-- 起点 -->
+                    <div class="relative">
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <i class="fa fa-map-marker text-xs"></i>
+                        </div>
+                        <input type="text" placeholder="起点位置" 
+                               class="w-full pl-8 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-base">
+                    </div>
+                    
+                    <!-- 箭头 -->
+                    <div class="flex justify-center">
+                        <i class="fa fa-chevron-right text-textSecondary"></i>
+                    </div>
+                    
+                    <!-- 终点 -->
+                    <div class="relative">
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                            <i class="fa fa-flag text-xs"></i>
+                        </div>
+                        <input type="text" placeholder="终点位置" 
+                               class="w-full pl-8 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-base">
+                    </div>
+                    
+                    <!-- 开始导航按钮 -->
+                    <button class="w-full bg-primary text-white py-3 rounded-lg text-base hover:bg-primary/90 transition-colors mt-2">
+                        开始导航
+                    </button>
+                </div>
+            </div>
+
+            <!-- 推荐路线 -->
+            <div class="mb-6">
+                <h2 class="text-xl font-medium mb-4">推荐路线</h2>
+                
+                <div class="space-y-4">
+                    <div class="route-card">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center">
+                                <i class="fa fa-male text-primary mr-2"></i>
+                                <span class="font-medium">步行路线</span>
+                            </div>
+                            <i class="fa fa-chevron-right text-textSecondary"></i>
+                        </div>
+                        <div class="mt-2 pl-6 space-y-1">
+                            <p class="text-sm"><span class="text-primary">●</span> 宿舍楼6号</p>
+                            <p class="text-sm"><span class="text-red-500">●</span> 教学楼A座</p>
+                            <p class="text-xs text-textSecondary mt-2"><i class="fa fa-clock-o mr-1"></i>10 分钟 <span class="ml-2">0.8 公里</span></p>
+                        </div>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center">
+                                <i class="fa fa-male text-primary mr-2"></i>
+                                <span class="font-medium">步行路线</span>
+                            </div>
+                            <i class="fa fa-chevron-right text-textSecondary"></i>
+                        </div>
+                        <div class="mt-2 pl-6 space-y-1">
+                            <p class="text-sm"><span class="text-primary">●</span> 图书馆</p>
+                            <p class="text-sm"><span class="text-red-500">●</span> 第一食堂</p>
+                            <p class="text-xs text-textSecondary mt-2"><i class="fa fa-clock-o mr-1"></i>6 分钟 <span class="ml-2">0.5 公里</span></p>
+                        </div>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center">
+                                <i class="fa fa-male text-primary mr-2"></i>
+                                <span class="font-medium">步行路线</span>
+                            </div>
+                            <i class="fa fa-chevron-right text-textSecondary"></i>
+                        </div>
+                        <div class="mt-2 pl-6 space-y-1">
+                            <p class="text-sm"><span class="text-primary">●</span> 体育馆</p>
+                            <p class="text-sm"><span class="text-red-500">●</span> 实验楼</p>
+                            <p class="text-xs text-textSecondary mt-2"><i class="fa fa-clock-o mr-1"></i>15 分钟 <span class="ml-2">1.2 公里</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 使用提示 -->
+            <div class="bg-blue-50 rounded-xl p-4 text-sm text-textMain">
+                <h3 class="font-medium mb-2">使用提示</h3>
+                <ul class="list-disc pl-5 space-y-1 text-textSecondary">
+                    <li>输入起点和终点后点击"开始导航"获取路线</li>
+                    <li>支持步行和骑行两种导航方式</li>
+                    <li>可以收藏常用路线以便快速查找</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

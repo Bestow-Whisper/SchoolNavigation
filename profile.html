@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园导航 - 我的</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1677FF',
+                        neutral: '#F5F7FA',
+                        textMain: '#333647',
+                        textSecondary: '#86909C'
+                    },
+                    boxShadow: {
+                        'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-btn {
+                @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+            }
+            .nav-active {
+                @apply bg-primary text-white rounded-lg;
+            }
+            .nav-inactive {
+                @apply hover:bg-neutral rounded-lg;
+            }
+            .menu-item {
+                @apply flex items-center justify-between p-4 hover:bg-neutral rounded-lg transition-colors cursor-pointer;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+    <!-- 导航栏：加宽拉细 + 居中 + 激活我的按钮 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <!-- 左侧logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <span class="text-lg font-medium">校园导航</span>
+                        <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+                    </div>
+                </div>
+                <!-- 右侧导航按钮 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                        <i class="fa fa-map-marker text-sm"></i>
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                        <i class="fa fa-search text-sm"></i>
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                        <i class="fa fa-road text-sm"></i>
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                        <i class="fa fa-star text-sm"></i>
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+                     <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+                    <div class="nav-btn nav-active">
+                        <i class="fa fa-user text-sm"></i>
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 核心内容：居中 + 限制最大宽度 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="max-w-3xl mx-auto">
+            <!-- 个人信息卡片 -->
+            <div class="bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl shadow-card p-6 mb-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mr-4">
+                        <i class="fa fa-user text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-medium">张三</h2>
+                        <p class="text-sm opacity-80">学号: 2021001234</p>
+                        <p class="text-sm opacity-80">计算机科学与技术学院</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-2 text-center">
+                    <div>
+                        <div class="text-2xl font-bold">127</div>
+                        <div class="text-xs opacity-80"><i class="fa fa-map-marker mr-1"></i>总访问次数</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">8</div>
+                        <div class="text-xs opacity-80"><i class="fa fa-star mr-1"></i>收藏地点</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">45</div>
+                        <div class="text-xs opacity-80"><i class="fa fa-road mr-1"></i>规划路线</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">32</div>
+                        <div class="text-xs opacity-80"><i class="fa fa-calendar mr-1"></i>使用天数</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 功能菜单 -->
+            <div class="bg-white rounded-xl shadow-card mb-6">
+                <div class="menu-item">
+                    <div class="flex items-center">
+                        <i class="fa fa-cog text-primary mr-3"></i>
+                        <span>账号设置</span>
+                    </div>
+                    <i class="fa fa-chevron-right text-textSecondary"></i>
+                </div>
+                <div class="menu-item">
+                    <div class="flex items-center">
+                        <i class="fa fa-question-circle text-green-500 mr-3"></i>
+                        <span>使用帮助</span>
+                    </div>
+                    <i class="fa fa-chevron-right text-textSecondary"></i>
+                </div>
+                <div class="menu-item">
+                    <div class="flex items-center">
+                        <i class="fa fa-info-circle text-textSecondary mr-3"></i>
+                        <span>关于我们</span>
+                    </div>
+                    <i class="fa fa-chevron-right text-textSecondary"></i>
+                </div>
+                <div class="menu-item">
+                    <div class="flex items-center">
+                        <i class="fa fa-sign-out text-red-500 mr-3"></i>
+                        <span>退出登录</span>
+                    </div>
+                    <i class="fa fa-chevron-right text-textSecondary"></i>
+                </div>
+            </div>
+
+            <!-- 小贴士 -->
+            <div class="bg-blue-50 rounded-xl p-4 text-sm text-textMain mb-6">
+                <h3 class="font-medium mb-2">校园导航小贴士</h3>
+                <ul class="list-disc pl-5 space-y-1 text-textSecondary">
+                    <li>收藏常用地点，快速导航更便捷</li>
+                    <li>使用路线规划功能，节省出行时间</li>
+                    <li>查看地点详情，了解开放时间和联系方式</li>
+                    <li>分享您的位置，让朋友更容易找到您</li>
+                </ul>
+            </div>
+
+            <!-- 底部信息 -->
+            <div class="text-center text-textSecondary text-xs">
+                <p>校园导航 v1.0.0</p>
+                <p class="mt-1">让校园出行更简单</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

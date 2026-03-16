@@ -1,0 +1,120 @@
+/* —————————— 登录 / 注册 页面专用样式 —————————— */
+.login-container {
+  max-width: 450px;
+  width: 100%;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333647;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: #86909C;
+  margin-bottom: 40px;
+  font-size: 15px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333647;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.form-input:focus {
+  border-color: #1677FF;
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15);
+  outline: none;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  background: #1677FF;
+  color: white;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background: #0c63e4;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(22, 119, 255, 0.25);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+.link-text {
+  color: #1677FF;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-text:hover {
+  text-decoration: underline;
+}
+
+/* 顶部小导航 */
+.top-nav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.top-nav a {
+  background: #1677FF;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.top-nav a:hover {
+  background: #0c63e4;
+}

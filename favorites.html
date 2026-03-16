@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园导航 - 收藏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1677FF',
+                        neutral: '#F5F7FA',
+                        textMain: '#333647',
+                        textSecondary: '#86909C'
+                    },
+                    boxShadow: {
+                        'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-btn {
+                @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+            }
+            .nav-active {
+                @apply bg-primary text-white rounded-lg;
+            }
+            .nav-inactive {
+                @apply hover:bg-neutral rounded-lg;
+            }
+            .fav-card {
+                @apply bg-white rounded-lg p-4 shadow-sm hover:shadow-card-hover transition-all duration-300 flex items-center justify-between;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+    <!-- 导航栏：加宽拉细 + 居中 + 激活收藏按钮 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <!-- 左侧logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <span class="text-lg font-medium">校园导航</span>
+                        <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+                    </div>
+                </div>
+                <!-- 右侧导航按钮 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                        <i class="fa fa-map-marker text-sm"></i>
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                        <i class="fa fa-search text-sm"></i>
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                        <i class="fa fa-road text-sm"></i>
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-active">
+                        <i class="fa fa-star text-sm"></i>
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                       <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='profile.html'">
+                        <i class="fa fa-user text-sm"></i>
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 核心内容：居中 + 限制最大宽度 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="max-w-3xl mx-auto">
+            <!-- 收藏夹 -->
+            <div class="bg-white rounded-xl shadow-card p-6 mb-6">
+                <h2 class="text-xl font-medium mb-2">收藏夹</h2>
+                <p class="text-textSecondary text-sm mb-6">管理您收藏的地点</p>
+                
+                <!-- 我的收藏 -->
+                <div class="mb-8">
+                    <h3 class="font-medium text-base mb-4 flex items-center">
+                        <i class="fa fa-star text-yellow-500 mr-2"></i>我的收藏 (3)
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="fav-card">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">图书馆</h4>
+                                    <p class="text-xs text-textSecondary">学习</p>
+                                    <p class="text-xs text-textSecondary mt-1"><i class="fa fa-eye mr-1"></i>访问 24 次</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                                    <i class="fa fa-share-alt text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors">
+                                    <i class="fa fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="fav-card">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                    <i class="fa fa-cutlery"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">第一食堂</h4>
+                                    <p class="text-xs text-textSecondary">餐饮</p>
+                                    <p class="text-xs text-textSecondary mt-1"><i class="fa fa-eye mr-1"></i>访问 18 次</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                                    <i class="fa fa-share-alt text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors">
+                                    <i class="fa fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="fav-card">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                    <i class="fa fa-futbol-o"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">体育馆</h4>
+                                    <p class="text-xs text-textSecondary">运动</p>
+                                    <p class="text-xs text-textSecondary mt-1"><i class="fa fa-eye mr-1"></i>访问 12 次</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                                    <i class="fa fa-share-alt text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors">
+                                    <i class="fa fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近访问 -->
+                <div>
+                    <h3 class="font-medium text-base mb-4 flex items-center">
+                        <i class="fa fa-history text-textSecondary mr-2"></i>最近访问
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="fav-card">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                    <i class="fa fa-university"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">教学楼A座</h4>
+                                    <p class="text-xs text-textSecondary">教学</p>
+                                    <p class="text-xs text-textSecondary mt-1"><i class="fa fa-eye mr-1"></i>访问 8 次</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                                    <i class="fa fa-share-alt text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors">
+                                    <i class="fa fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="fav-card">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                    <i class="fa fa-coffee"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">咖啡厅</h4>
+                                    <p class="text-xs text-textSecondary">休闲</p>
+                                    <p class="text-xs text-textSecondary mt-1"><i class="fa fa-eye mr-1"></i>访问 5 次</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                                    <i class="fa fa-share-alt text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 hover:bg-red-100 transition-colors">
+                                    <i class="fa fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

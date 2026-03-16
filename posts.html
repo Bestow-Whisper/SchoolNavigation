@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园导航 - 帖子</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1677FF',
+                        neutral: '#F5F7FA',
+                        textMain: '#333647',
+                        textSecondary: '#86909C'
+                    },
+                    boxShadow: {
+                        'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .nav-btn {
+                @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+            }
+            .nav-active {
+                @apply bg-primary text-white rounded-lg;
+            }
+            .nav-inactive {
+                @apply hover:bg-neutral rounded-lg;
+            }
+            .card-hover {
+                @apply hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300;
+            }
+            .post-card {
+                @apply bg-white rounded-xl shadow-card p-4 mb-4 card-hover;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+    <!-- 导航栏：新增帖子按钮，保持样式统一 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <!-- 左侧logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <span class="text-lg font-medium">校园导航</span>
+                        <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+                    </div>
+                </div>
+                <!-- 右侧导航按钮：新增帖子按钮 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                        <i class="fa fa-map-marker text-sm"></i>
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                        <i class="fa fa-search text-sm"></i>
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                        <i class="fa fa-road text-sm"></i>
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                        <i class="fa fa-star text-sm"></i>
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+                    <div class="nav-btn nav-active">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='profile.html'">
+                        <i class="fa fa-user text-sm"></i>
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 核心内容：居中布局，与其他页面一致 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="max-w-3xl mx-auto">
+            <!-- 发帖表单 -->
+            <div class="bg-white rounded-xl shadow-card p-6 mb-8">
+                <h2 class="text-xl font-medium mb-4 flex items-center">
+                    <i class="fa fa-pencil-square-o text-primary mr-2"></i>发布新帖子
+                </h2>
+                
+                <form id="postForm" class="space-y-4">
+                    <!-- 标题输入 -->
+                    <div>
+                        <label for="postTitle" class="block text-sm font-medium text-textMain mb-1">帖子标题</label>
+                        <input 
+                            type="text" 
+                            id="postTitle" 
+                            placeholder="请输入帖子标题（如：图书馆占座攻略、食堂新品推荐...）"
+                            class="w-full pl-4 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                            required
+                        >
+                    </div>
+                    
+                    <!-- 内容输入 -->
+                    <div>
+                        <label for="postContent" class="block text-sm font-medium text-textMain mb-1">帖子内容</label>
+                        <textarea 
+                            id="postContent" 
+                            rows="4" 
+                            placeholder="分享你的校园生活、导航使用心得、校园地点推荐..."
+                            class="w-full pl-4 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                            required
+                        ></textarea>
+                    </div>
+                    
+                    <!-- 发布按钮 -->
+                    <button 
+                        type="submit"
+                        class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center"
+                    >
+                        <i class="fa fa-paper-plane mr-2"></i>发布帖子
+                    </button>
+                </form>
+            </div>
+
+            <!-- 帖子列表 -->
+            <div>
+                <h2 class="text-xl font-medium mb-4 flex items-center">
+                    <i class="fa fa-list-alt text-primary mr-2"></i>校园帖子广场
+                </h2>
+                
+                <!-- 帖子1 -->
+                <div class="post-card">
+                    <div class="flex items-start justify-between mb-3">
+                        <!-- 作者信息 -->
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">李四</h3>
+                                <p class="text-xs text-textSecondary">2024-03-15 10:20</p>
+                            </div>
+                        </div>
+                        <!-- 更多操作 -->
+                        <button class="text-textSecondary hover:text-primary transition-colors">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 帖子内容 -->
+                    <h4 class="font-medium mb-2">图书馆自习室最佳位置推荐</h4>
+                    <p class="text-textMain text-sm mb-4">
+                        图书馆三楼靠窗的位置光线最好，而且比较安静，适合长时间学习。不过需要早点去占座，一般8点之后就没位置了。另外，自习室禁止饮食，大家注意哦～
+                    </p>
+                    
+                    <!-- 互动按钮 -->
+                    <div class="flex items-center justify-between text-sm text-textSecondary pt-2 border-t border-gray-100">
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-thumbs-o-up mr-1"></i>
+                            <span>点赞 (28)</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-comment-o mr-1"></i>
+                            <span>评论 (8)</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-star-o mr-1"></i>
+                            <span>收藏</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-share-alt mr-1"></i>
+                            <span>分享</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 帖子2 -->
+                <div class="post-card">
+                    <div class="flex items-start justify-between mb-3">
+                        <!-- 作者信息 -->
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">王五</h3>
+                                <p class="text-xs text-textSecondary">2024-03-14 18:45</p>
+                            </div>
+                        </div>
+                        <!-- 更多操作 -->
+                        <button class="text-textSecondary hover:text-primary transition-colors">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 帖子内容 -->
+                    <h4 class="font-medium mb-2">第一食堂新品测评</h4>
+                    <p class="text-textMain text-sm mb-4">
+                        第一食堂今天上新了麻辣香锅，味道超赞！食材新鲜，辣度可选，价格也实惠，15元就能吃到撑。推荐大家去试试，位置在食堂二楼右侧窗口～
+                    </p>
+                    
+                    <!-- 互动按钮 -->
+                    <div class="flex items-center justify-between text-sm text-textSecondary pt-2 border-t border-gray-100">
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-thumbs-o-up mr-1"></i>
+                            <span>点赞 (45)</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-comment-o mr-1"></i>
+                            <span>评论 (12)</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-star-o mr-1"></i>
+                            <span>收藏</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-share-alt mr-1"></i>
+                            <span>分享</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 帖子3 -->
+                <div class="post-card">
+                    <div class="flex items-start justify-between mb-3">
+                        <!-- 作者信息 -->
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">赵六</h3>
+                                <p class="text-xs text-textSecondary">2024-03-13 09:10</p>
+                            </div>
+                        </div>
+                        <!-- 更多操作 -->
+                        <button class="text-textSecondary hover:text-primary transition-colors">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 帖子内容 -->
+                    <h4 class="font-medium mb-2">校园导航使用小技巧</h4>
+                    <p class="text-textMain text-sm mb-4">
+                        发现校园导航可以收藏常用路线，设置好起点和终点后收藏，下次直接点击就能导航，不用重复输入了！另外，点击地点卡片上的星星可以收藏地点，超方便～
+                    </p>
+                    
+                    <!-- 互动按钮 -->
+                    <div class="flex items-center justify-between text-sm text-textSecondary pt-2 border-t border-gray-100">
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-thumbs-o-up mr-1"></i>
+                            <span>点赞 (32)</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-comment-o mr-1"></i>
+                            <span>评论 (5)</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-star-o mr-1"></i>
+                            <span>收藏</span>
+                        </button>
+                        <button class="flex items-center hover:text-primary transition-colors">
+                            <i class="fa fa-share-alt mr-1"></i>
+                            <span>分享</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 简单的发帖提交逻辑（前端演示） -->
+    <script>
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            
+            if (title && content) {
+                alert('帖子发布成功！（前端演示，实际需对接后端接口）');
+                this.reset(); // 清空表单
+            } else {
+                alert('请填写标题和内容后发布！');
+            }
+        });
+    </script>
+</body>
+</html>

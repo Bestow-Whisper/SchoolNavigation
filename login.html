@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - 校园导航</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="logstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <!-- <link rel="stylesheet" href="/SchoolNavigation/fontawesome-free-7.2.0-web/css/all.min.css"> -->
+  <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#1677FF',
+                    neutral: '#F5F7FA',
+                    textMain: '#333647',
+                    textSecondary: '#86909C'
+                },
+                boxShadow: {
+                    'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+                    'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+                }
+            }
+        }
+    }
+  </script>
+  <!-- 2. 补充导航按钮的核心样式（和正常页面保持一致） -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .nav-btn {
+          @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+      }
+      .nav-active {
+          @apply bg-primary text-white rounded-lg;
+      }
+      .nav-inactive {
+          @apply hover:bg-neutral rounded-lg;
+      }
+      .fav-card {
+          @apply bg-white rounded-lg p-4 shadow-sm hover:shadow-card-hover transition-all duration-300 flex items-center justify-between;
+      }
+    }
+  </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+<header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <!-- 左侧logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <span class="text-lg font-medium">校园导航</span>
+                        <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+                    </div>
+                </div>
+                <!-- 右侧导航按钮：补充图标类，和正常页面保持一致 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                        <i class="fa fa-map-marker text-sm"></i>
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                        <i class="fa fa-search text-sm"></i>
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                        <i class="fa fa-road text-sm"></i>
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                        <i class="fa fa-star text-sm"></i>
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+                  
+                    <!-- 可选：补充其他导航按钮，和正常页面保持一致 -->
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+                      <div class="nav-btn nav-active">
+                        <i class="fa fa-sign-in text-sm"></i>
+                        <span class="text-xs mt-1">登录</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">📍 欢迎登录校园导航</h2>
+    <p class="login-subtitle">请输入账号密码，开启校园导航</p>
+
+    <div class="form-group">
+      <label class="form-label">学号 / 账号</label>
+      <input type="text" class="form-input" placeholder="请输入学号">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">密码</label>
+      <input type="password" class="form-input" placeholder="请输入密码">
+    </div>
+
+    <button class="login-btn">🚀 立即登录</button>
+
+    <div class="text-center mt-20">
+      还没有账号？<a href="register.html" class="link-text">去注册</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
