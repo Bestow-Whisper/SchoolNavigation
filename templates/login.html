@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="logstyle.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   <!-- <link rel="stylesheet" href="/SchoolNavigation/fontawesome-free-7.2.0-web/css/all.min.css"> -->
   <script>
     tailwind.config = {
         theme: {
@@ -26,7 +25,6 @@
         }
     }
   </script>
-  <!-- 2. 补充导航按钮的核心样式（和正常页面保持一致） -->
   <style type="text/tailwindcss">
     @layer utilities {
       .nav-btn {
@@ -40,6 +38,34 @@
       }
       .fav-card {
           @apply bg-white rounded-lg p-4 shadow-sm hover:shadow-card-hover transition-all duration-300 flex items-center justify-between;
+      }
+      /* 新增登录表单样式，确保输入框/按钮样式正常 */
+      .login-container {
+          @apply flex items-center justify-center min-h-[calc(100vh-56px)] px-4;
+      }
+      .login-card {
+          @apply bg-white rounded-xl shadow-card p-8 w-full max-w-md;
+      }
+      .login-title {
+          @apply text-xl font-bold text-center mb-2 text-textMain;
+      }
+      .login-subtitle {
+          @apply text-sm text-textSecondary text-center mb-8;
+      }
+      .form-group {
+          @apply mb-6;
+      }
+      .form-label {
+          @apply block text-sm font-medium text-textMain mb-2;
+      }
+      .form-input {
+          @apply w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all;
+      }
+      .login-btn {
+          @apply w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-all mb-4 flex items-center justify-center;
+      }
+      .link-text {
+          @apply text-primary hover:underline;
       }
     }
   </style>
@@ -58,38 +84,43 @@
                         <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
                     </div>
                 </div>
-                <!-- 右侧导航按钮：补充图标类，和正常页面保持一致 -->
+                <!-- 右侧导航按钮 -->
                 <div class="flex items-center space-x-1">
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/map'">
                         <i class="fa fa-map-marker text-sm"></i>
                         <span class="text-xs mt-1">地图</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/search'">
                         <i class="fa fa-search text-sm"></i>
                         <span class="text-xs mt-1">搜索</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/route'">
                         <i class="fa fa-road text-sm"></i>
                         <span class="text-xs mt-1">路线</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/favorites'">
                         <i class="fa fa-star text-sm"></i>
                         <span class="text-xs mt-1">收藏</span>
                     </div>
-                  
-                    <!-- 可选：补充其他导航按钮，和正常页面保持一致 -->
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/posts'">
                         <i class="fa fa-comment text-sm"></i>
                         <span class="text-xs mt-1">帖子</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/notices'">
                         <i class="fa fa-bell text-sm"></i>
                         <span class="text-xs mt-1">公告</span>
                     </div>
-                      <div class="nav-btn nav-active">
+{% if session.username %}
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/profile'">
+                        <i class="fa fa-user text-sm"></i>
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+    {% else %}
+                     <div class="nav-btn nav-active">
                         <i class="fa fa-sign-in text-sm"></i>
                         <span class="text-xs mt-1">登录</span>
                     </div>
+    {% endif %}
                 </div>
             </div>
         </div>
@@ -100,23 +131,62 @@
     <h2 class="login-title">📍 欢迎登录校园导航</h2>
     <p class="login-subtitle">请输入账号密码，开启校园导航</p>
 
+    <!-- 完善账号输入框：添加id/name，确保能获取参数 -->
     <div class="form-group">
       <label class="form-label">学号 / 账号</label>
-      <input type="text" class="form-input" placeholder="请输入学号">
+      <input type="text" id="username" name="username" class="form-input" placeholder="请输入账号" required>
     </div>
 
+    <!-- 完善密码输入框：添加id/name，确保能获取参数 -->
     <div class="form-group">
       <label class="form-label">密码</label>
-      <input type="password" class="form-input" placeholder="请输入密码">
+      <input type="password" id="password" name="password" class="form-input" placeholder="请输入密码" required>
     </div>
 
-    <button class="login-btn">🚀 立即登录</button>
+    <!-- 登录按钮：绑定点击事件，获取参数 -->
+    <button class="login-btn" onclick="handleLogin()">
+      <i class="fa fa-rocket mr-2"></i>
+      <span>🚀 立即登录</span>
+    </button>
 
     <div class="text-center mt-20">
-      还没有账号？<a href="register.html" class="link-text">去注册</a>
+      还没有账号？<a href="/register" class="link-text">去注册</a>
     </div>
   </div>
 </div>
+
+<!-- 新增JS：获取账号密码参数的核心逻辑 -->
+<script>
+ function handleLogin() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  if (!username) {
+    alert('请输入账号！');
+    return;
+  }
+  if (!password) {
+    alert('请输入密码！');
+    return;
+  }
+
+  // 关键：发送表单格式，适配你的后端
+  fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'username=' + username + '&password=' + password
+  })
+  .then(res => res.text())
+  .then(data => {
+    window.location.href = '/map';
+  })
+  .catch(err => {
+    alert('网络异常，请重试！');
+  });
+}
+</script>
 
 </body>
 </html>

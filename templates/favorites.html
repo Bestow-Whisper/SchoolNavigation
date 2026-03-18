@@ -58,15 +58,15 @@
                 </div>
                 <!-- 右侧导航按钮 -->
                 <div class="flex items-center space-x-1">
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/map">
                         <i class="fa fa-map-marker text-sm"></i>
                         <span class="text-xs mt-1">地图</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/search">
                         <i class="fa fa-search text-sm"></i>
                         <span class="text-xs mt-1">搜索</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/route'">
                         <i class="fa fa-road text-sm"></i>
                         <span class="text-xs mt-1">路线</span>
                     </div>
@@ -74,18 +74,30 @@
                         <i class="fa fa-star text-sm"></i>
                         <span class="text-xs mt-1">收藏</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/posts'">
                         <i class="fa fa-comment text-sm"></i>
                         <span class="text-xs mt-1">帖子</span>
                     </div>
-                       <div class="nav-btn nav-inactive" onclick="window.location.href='notices.html'">
+                       <div class="nav-btn nav-inactive" onclick="window.location.href='/notices'">
                         <i class="fa fa-bell text-sm"></i>
                         <span class="text-xs mt-1">公告</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='profile.html'">
+
+
+{% if session.username %}
+
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/profile'">
                         <i class="fa fa-user text-sm"></i>
                         <span class="text-xs mt-1">我的</span>
                     </div>
+    {% else %}
+
+                     <div class="nav-btn nav-inactive" onclick="window.location.href='/login'">
+                        <i class="fa fa-sign-in text-sm"></i>
+                        <span class="text-xs mt-1">登录</span>
+                    </div>
+    {% endif %}
+
                 </div>
             </div>
         </div>

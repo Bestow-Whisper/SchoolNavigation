@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册 - 校园导航</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="logstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1677FF',
+            neutral: '#F5F7FA',
+            textMain: '#333647',
+            textSecondary: '#86909C',
+            success: '#52C41A',
+            error: '#F5222D'
+          },
+          boxShadow: {
+            'card': '0 2px 12px 0 rgba(0, 0, 0, 0.08)',
+            'card-hover': '0 4px 16px 0 rgba(0, 0, 0, 0.12)'
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .nav-btn {
+        @apply w-[80px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300;
+      }
+      .nav-active {
+        @apply bg-primary text-white rounded-lg;
+      }
+      .nav-inactive {
+        @apply hover:bg-neutral rounded-lg;
+      }
+      .fav-card {
+        @apply bg-white rounded-lg p-4 shadow-sm hover:shadow-card-hover transition-all duration-300 flex items-center justify-between;
+      }
+      .requirement-valid {
+        @apply text-success;
+      }
+      .requirement-invalid {
+        @apply text-error;
+      }
+      .input-error {
+        @apply border-error;
+      }
+      .message-box {
+        @apply rounded-lg p-3 text-center text-sm;
+      }
+    }
+  </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-textMain">
+  <!-- 头部导航 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14">
+        <!-- 左侧logo -->
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-2">
+              <i class="fa fa-map-marker"></i>
+            </div>
+            <span class="text-lg font-medium">校园导航</span>
+            <span class="text-xs text-textSecondary ml-1">Campus Navigator</span>
+          </div>
+        </div>
+                <!-- 右侧导航按钮：补充图标类，和正常页面保持一致 -->
+                <div class="flex items-center space-x-1">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/map'">
+                        <i class="fa fa-map-marker text-sm"></i>
+                        <span class="text-xs mt-1">地图</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/search'">
+                        <i class="fa fa-search text-sm"></i>
+                        <span class="text-xs mt-1">搜索</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/route'">
+                        <i class="fa fa-road text-sm"></i>
+                        <span class="text-xs mt-1">路线</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/favorites'">
+                        <i class="fa fa-star text-sm"></i>
+                        <span class="text-xs mt-1">收藏</span>
+                    </div>
+
+                    <!-- 可选：补充其他导航按钮，和正常页面保持一致 -->
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/posts'">
+                        <i class="fa fa-comment text-sm"></i>
+                        <span class="text-xs mt-1">帖子</span>
+                    </div>
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/notices'">
+                        <i class="fa fa-bell text-sm"></i>
+                        <span class="text-xs mt-1">公告</span>
+                    </div>
+{% if session.username %}
+
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/profile'">
+                        <i class="fa fa-user text-sm"></i>
+                        <span class="text-xs mt-1">我的</span>
+                    </div>
+    {% else %}
+
+                     <div class="nav-btn nav-active">
+                        <i class="fa fa-sign-in text-sm"></i>
+                        <span class="text-xs mt-1">登录</span>
+                    </div>
+    {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 注册表单容器 -->
+  <div class="max-w-md mx-auto px-4 sm:px-6 py-12">
+    <div class="bg-white rounded-xl shadow-card p-8">
+      <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-2 text-textMain">📝 用户注册</h2>
+      <p class="text-textSecondary text-center mb-8">注册账号，使用完整校园导航服务</p>
+
+      <!-- 错误提示区域 -->
+      <div id="errorMessage" class="message-box bg-red-50 text-error hidden mb-4"></div>
+
+      <!-- 注册成功区域 -->
+      <div id="successMessage" class="message-box bg-green-50 text-success hidden mb-4">
+        <p>注册成功！</p>
+        <p>您的账号是：<span id="generatedAccount" class="font-bold text-primary text-lg"></span></p>
+        <p class="mt-2">请妥善保管您的账号信息</p>
+        <div class="mt-3">
+          <a href="login.html" class="text-primary hover:underline">立即登录</a>
+        </div>
+      </div>
+
+      <!-- 注册表单 -->
+      <form id="registerForm">
+        <!-- 用户名输入 -->
+        <div class="mb-6">
+          <label for="username" class="block text-sm font-medium text-textMain mb-2">用户名</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+            placeholder="请输入用户名（4-20位字母、数字或下划线）"
+            required
+          >
+          <div id="usernameError" class="text-error text-xs mt-2 hidden">用户名必须是4-20位字母、数字或下划线</div>
+        </div>
+
+        <!-- 密码输入 -->
+        <div class="mb-6">
+          <label for="password" class="block text-sm font-medium text-textMain mb-2">设置密码</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+            placeholder="请输入密码"
+            required
+          >
+          <div id="passwordError" class="text-error text-xs mt-2 hidden">密码不符合要求</div>
+
+          <!-- 密码强度要求 -->
+          <div class="mt-3 text-sm text-textSecondary">
+            <p class="mb-1">密码要求：</p>
+            <div id="reqLength" class="requirement-invalid flex items-center gap-2">
+              <i class="fa fa-times-circle"></i> 至少8位
+            </div>
+            <div id="reqUpper" class="requirement-invalid flex items-center gap-2 mt-1">
+              <i class="fa fa-times-circle"></i> 包含大写字母
+            </div>
+            <div id="reqLower" class="requirement-invalid flex items-center gap-2 mt-1">
+              <i class="fa fa-times-circle"></i> 包含小写字母
+            </div>
+            <div id="reqNumber" class="requirement-invalid flex items-center gap-2 mt-1">
+              <i class="fa fa-times-circle"></i> 包含数字
+            </div>
+            <div id="reqSpecial" class="requirement-invalid flex items-center gap-2 mt-1">
+              <i class="fa fa-times-circle"></i> 包含特殊字符
+            </div>
+          </div>
+        </div>
+
+        <!-- 确认密码 -->
+        <div class="mb-8">
+          <label for="confirm_password" class="block text-sm font-medium text-textMain mb-2">确认密码</label>
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none"
+            placeholder="请再次输入密码"
+            required
+          >
+          <div id="confirmPasswordError" class="text-error text-xs mt-2 hidden">两次输入的密码不一致</div>
+        </div>
+
+        <!-- 注册按钮 -->
+        <button
+          type="submit"
+          id="registerBtn"
+          class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          立即注册
+        </button>
+
+        <!-- 登录链接 -->
+        <div class="text-center mt-6 text-sm">
+          已有账号？<a href="/login" class="text-primary font-medium hover:underline">去登录</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 密码验证函数
+    function validatePassword(password) {
+      const requirements = {
+        length: password.length >= 8,
+        upper: /[A-Z]/.test(password),
+        lower: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[^a-zA-Z0-9]/.test(password)
+      };
+      return requirements;
+    }
+
+    // 更新密码要求显示
+    function updatePasswordRequirements(password) {
+      const req = validatePassword(password);
+
+      // 更新每个要求项的显示
+      const reqLength = document.getElementById('reqLength');
+      const reqUpper = document.getElementById('reqUpper');
+      const reqLower = document.getElementById('reqLower');
+      const reqNumber = document.getElementById('reqNumber');
+      const reqSpecial = document.getElementById('reqSpecial');
+
+      // 更新长度要求
+      reqLength.innerHTML = `<i class="fa ${req.length ? 'fa-check-circle' : 'fa-times-circle'}"></i> 至少8位`;
+      reqLength.className = `flex items-center gap-2 mt-1 ${req.length ? 'requirement-valid' : 'requirement-invalid'}`;
+
+      // 更新大写字母要求
+      reqUpper.innerHTML = `<i class="fa ${req.upper ? 'fa-check-circle' : 'fa-times-circle'}"></i> 包含大写字母`;
+      reqUpper.className = `flex items-center gap-2 mt-1 ${req.upper ? 'requirement-valid' : 'requirement-invalid'}`;
+
+      // 更新小写字母要求
+      reqLower.innerHTML = `<i class="fa ${req.lower ? 'fa-check-circle' : 'fa-times-circle'}"></i> 包含小写字母`;
+      reqLower.className = `flex items-center gap-2 mt-1 ${req.lower ? 'requirement-valid' : 'requirement-invalid'}`;
+
+      // 更新数字要求
+      reqNumber.innerHTML = `<i class="fa ${req.number ? 'fa-check-circle' : 'fa-times-circle'}"></i> 包含数字`;
+      reqNumber.className = `flex items-center gap-2 mt-1 ${req.number ? 'requirement-valid' : 'requirement-invalid'}`;
+
+      // 更新特殊字符要求
+      reqSpecial.innerHTML = `<i class="fa ${req.special ? 'fa-check-circle' : 'fa-times-circle'}"></i> 包含特殊字符`;
+      reqSpecial.className = `flex items-center gap-2 mt-1 ${req.special ? 'requirement-valid' : 'requirement-invalid'}`;
+
+      // 返回密码是否符合所有要求
+      return Object.values(req).every(v => v === true);
+    }
+
+    // 验证用户名
+    function validateUsername(username) {
+      return /^[a-zA-Z0-9_]{4,20}$/.test(username);
+    }
+
+    // 表单验证
+    function validateForm(username, password, confirmPassword) {
+      let isValid = true;
+
+      // 验证用户名
+      if (!validateUsername(username)) {
+        document.getElementById('usernameError').classList.remove('hidden');
+        document.getElementById('username').classList.add('input-error');
+        isValid = false;
+      } else {
+        document.getElementById('usernameError').classList.add('hidden');
+        document.getElementById('username').classList.remove('input-error');
+      }
+
+      // 验证密码
+      const passwordValid = updatePasswordRequirements(password);
+      if (!passwordValid) {
+        document.getElementById('passwordError').classList.remove('hidden');
+        document.getElementById('password').classList.add('input-error');
+        isValid = false;
+      } else {
+        document.getElementById('passwordError').classList.add('hidden');
+        document.getElementById('password').classList.remove('input-error');
+      }
+
+      // 验证确认密码
+      if (password !== confirmPassword) {
+        document.getElementById('confirmPasswordError').classList.remove('hidden');
+        document.getElementById('confirm_password').classList.add('input-error');
+        isValid = false;
+      } else {
+        document.getElementById('confirmPasswordError').classList.add('hidden');
+        document.getElementById('confirm_password').classList.remove('input-error');
+      }
+
+      return isValid;
+    }
+
+    // 实时密码验证
+    document.getElementById('password').addEventListener('input', function(e) {
+      updatePasswordRequirements(e.target.value);
+    });
+
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirm_password').value;
+
+  if (!validateForm(username, password, confirmPassword)) {
+    return;
+  }
+
+  const submitBtn = document.getElementById('registerBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '注册中...';
+
+  try {
+    // 修复1：请求地址改为/register
+    const response = await fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      // 修复2：参数名改为password，补充confirm_password
+      body: new URLSearchParams({
+        'username': username,
+        'password': password,
+        'confirm_password': confirmPassword
+      })
+    });
+
+    // 修复3：先判断响应是否成功，再根据后端返回格式处理
+    // 后端修改后会返回JSON，若未改则先兼容text
+    const result = await response.json();
+    console.log('服务器响应:', result);
+
+    if (result.success) {
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('successMessage').classList.remove('hidden');
+      document.getElementById('generatedAccount').textContent = result.account || username;
+      document.getElementById('errorMessage').classList.add('hidden');
+    } else {
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = result.message || '注册失败';
+      errorDiv.classList.remove('hidden');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '立即注册';
+    }
+  } catch (error) {
+    console.error('注册错误:', error);
+    const errorDiv = document.getElementById('errorMessage');
+    // 兼容后端未返回JSON的情况
+    errorDiv.textContent = '注册失败：' + (error.message || '请检查输入或网络');
+    errorDiv.classList.remove('hidden');
+    submitBtn.disabled = false;
+    submitBtn.textContent = '立即注册';
+  }
+});
+
+  </script>>
+</body>
+</html>

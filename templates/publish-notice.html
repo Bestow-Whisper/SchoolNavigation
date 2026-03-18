@@ -61,34 +61,44 @@
                 </div>
                 <!-- 右侧导航按钮 -->
                 <div class="flex items-center space-x-1">
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='map.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/map'">
                         <i class="fa fa-map-marker text-sm"></i>
                         <span class="text-xs mt-1">地图</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='search.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/search'">
                         <i class="fa fa-search text-sm"></i>
                         <span class="text-xs mt-1">搜索</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='route.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/route'">
                         <i class="fa fa-road text-sm"></i>
                         <span class="text-xs mt-1">路线</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='favorites.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/favorites'">
                         <i class="fa fa-star text-sm"></i>
                         <span class="text-xs mt-1">收藏</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='posts.html'">
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/posts'">
                         <i class="fa fa-comment text-sm"></i>
                         <span class="text-xs mt-1">帖子</span>
                     </div>
-                    <div class="nav-btn nav-active" onclick="window.location.href='notices.html'">
+                    <div class="nav-btn nav-active" onclick="window.location.href='/notices'">
                         <i class="fa fa-bell text-sm"></i>
                         <span class="text-xs mt-1">公告</span>
                     </div>
-                    <div class="nav-btn nav-inactive" onclick="window.location.href='profile.html'">
+{% if session.username %}
+
+                    <div class="nav-btn nav-inactive" onclick="window.location.href='/profile'">
                         <i class="fa fa-user text-sm"></i>
                         <span class="text-xs mt-1">我的</span>
                     </div>
+    {% else %}
+
+                     <div class="nav-btn nav-inactive" onclick="window.location.href='/login'">
+                        <i class="fa fa-sign-in text-sm"></i>
+                        <span class="text-xs mt-1">登录</span>
+                    </div>
+    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -99,7 +109,7 @@
         <div class="max-w-3xl mx-auto">
             <!-- 返回按钮 -->
             <div class="mb-6">
-                <button onclick="window.location.href='notices.html'" class="flex items-center text-primary hover:text-primary/80 transition-colors">
+                <button onclick="window.location.href='/notices'" class="flex items-center text-primary hover:text-primary/80 transition-colors">
                     <i class="fa fa-arrow-left mr-1"></i>
                     <span>返回公告列表</span>
                 </button>
