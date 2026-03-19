@@ -2,12 +2,25 @@ from flask import Flask, request, jsonify, send_from_directory, render_template
 import os,string
 from sql import *
 from flask import session, redirect
+from datetime import timedelta
 
 app = Flask(__name__,
             template_folder='templates',  # 明确指定模板文件夹
             static_folder='static',        # 明确指定静态文件夹
             static_url_path='/static')
 app.config['SECRET_KEY'] = 'hanimi06spar10'
+app.config['SESSION_PERMANENT'] = False
+
+# # 1. 设置安全的SECRET_KEY（必须，建议从环境变量读取）
+# app.secret_key = os.environ.get('FLASK_SECRET_KEY') or 'your_secure_random_key_123456'  # 替换为随机字符串
+# # 2. 设置Session过期时间（例如30分钟，无操作则过期）
+# app.permanent_session_lifetime = timedelta(minutes=30)
+# # 3. 禁用Session持久化（关闭浏览器则失效）
+# app.config['SESSION_PERMANENT'] = False
+# # 4. 可选：强制Session随浏览器关闭失效
+# app.config['SESSION_COOKIE_SECURE'] = False  # 开发环境设为False，生产环境HTTPS下设为True
+# app.config['SESSION_COOKIE_HTTPONLY'] = True  # 防止JS读取Cookie，提升安全
+# app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 @app.route('/')
 def index():
     return render_template('map.html')
@@ -16,13 +29,19 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        rs=db4(username,password)
-        if rs:
+        if verify_user(username, password):
+            # 保留角色查询逻辑
+            with get_db_connection() as (conn, cur):
+                cur.execute("SELECT role FROM users WHERE account=?", (username,))
+                user = cur.fetchone()
+
             session['username'] = username
-            session['password'] = password
+            session['role'] = user['role']  # 保留权限存储
+            # 关键：改回直接渲染map.html（和旧代码一致）
             return render_template('map.html')
         else:
-            return render_template('login.html',error="wrong")
+             # 改回返回登录页+错误提示（和旧代码一致）
+             return render_template('login.html', error="账号或密码错误")
     else:
         return render_template('login.html')
 @app.route('/register.html')
@@ -62,7 +81,7 @@ def register():
             return jsonify({'success': False, 'message': '两次输入的密码不一致'})
 
         # 5. 调用注册函数
-        rs = db6(username, password)
+        rs = register_user(username, password)
         if rs:
             return jsonify({'success': True, 'message': '注册成功', 'account': username})
         else:
@@ -70,6 +89,19 @@ def register():
     else:
         # GET请求返回页面（兼容直接访问/register的情况）
         return render_template('register.html')
+
+# @app.route('/admin')
+# def admin_page():
+#     # 未登录
+#     if 'username' not in session:
+#         return redirect('/login')
+#
+#     # 不是管理员
+#     if session.get('role') != 'admin':
+#         return "权限不足，无法访问后台"
+#
+#     # 是管理员 → 正常显示
+#     return render_template('admin.html')
 @app.route('/map')
 def map():
     return render_template('map.html')
@@ -93,8 +125,9 @@ def posts():
 @app.route('/notices')
 def notices():
     return render_template('notices.html')
-
-
+@app.route('/publish-notices')
+def publishnotices():
+    return render_template('publish-notices.html')
 @app.route('/profile')
 def profile():
     username = session.get('username')
@@ -108,6 +141,7 @@ def profile():
 def logout():
     session.clear()  # 清空当前用户的所有登录信息
     return redirect('/')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 

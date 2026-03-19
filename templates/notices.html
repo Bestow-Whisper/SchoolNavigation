@@ -110,16 +110,16 @@
     <!-- 核心内容：移除发布表单，添加跳转按钮 -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="max-w-3xl mx-auto">
-            <!-- 管理员专属：发布公告跳转按钮 -->
-            <div id="adminBtn" class="mb-8">
-                <button 
-                    onclick="window.location.href='/publish-notice'"
-                    class="bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center"
-                >
-                    <i class="fa fa-plus mr-2"></i>发布新公告
-                </button>
-            </div>
-
+<!-- 管理员专属：发布公告跳转按钮 -->
+{% if session.role == 'admin' %}  {# 仅管理员显示 #}
+        <div id="adminBtn" class="mb-8">
+            <button
+                 onclick="window.location.href='/publish-notice'"
+                 class="bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center">
+                <i class="fa fa-plus mr-2"></i>发布新公告
+            </button>
+        </div>
+        {% endif %}  {# 结束判断 #}
             <!-- 公告列表（所有用户可见） -->
             <div>
                 <h2 class="text-xl font-medium mb-4 flex items-center">
