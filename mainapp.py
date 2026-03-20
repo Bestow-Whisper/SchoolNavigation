@@ -127,7 +127,7 @@ def notices():
     return render_template('notices.html')
 @app.route('/publish-notices')
 def publishnotices():
-    return render_template('publish-notices.html')
+    return render_template('publish-notice.html')
 @app.route('/profile')
 def profile():
     username = session.get('username')
